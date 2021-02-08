@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -24,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         wifiSwitch = findViewById(R.id.wifiSwitch);
+
+        //For Implicit broadcast call
+        IntentFilter filter = new IntentFilter("com.codinginflow.EXAMPLE_ACTION");
+        registerReceiver(exampleBroadcastReceiver, filter);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
@@ -46,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
+    //To call our Implicit broadcast call this from another application
+    /*void callFromOtherApplication(View v){
+        Intent intent = new Intent("com.codinginflow.EXAMPLE_ACTION");
+        intent.putExtra("com.codinginflow.EXAMPLE_TEXT","Broadcast received");
+        sendBroadcast(intent);
+    }*/
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -59,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        unregisterReceiver(exampleBroadcastReceiver);
+        unregisterReceiver(exampleBroadcastReceiver);
         unregisterReceiver(wifiStateReceiver);
     }
 
